@@ -151,7 +151,7 @@ func runInlog() {
 
 	jsonPayload, _ := json.Marshal(payload)
 
-	url := "http://154.53.35.160:3800/v1/engine/machine/"
+	url := "https://receiver.inlog.inapplet.com/v1/engine/machine/"
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
@@ -202,7 +202,7 @@ func logUnit() {
 
 	config := getConfig()
 
-	url := "http://154.53.35.160:3800/v1/engine/log_monitor/"
+	url := "https://receiver.inlog.inapplet.com/v1/engine/log_monitor/"
 
 	// Obtenção de informações de CPU
 	cpuPercent, _ := cpuPercent()
@@ -368,31 +368,6 @@ func main() {
 
 	if args[0] == "run" {
 		runInlog()
-		os.Exit(0)
-	}
-
-	if args[0] == "test" {
-
-		getConfig()
-		os.Exit(0)
-
-		url := "https://api.telegram.org/bot6316859141:AAEjY-x-XR03PC9NFlQRmBTz860doktbOh0/sendMessage?chat_id=973974621&text=InLog RUNNING"
-
-		resp, err := http.Get(url)
-		if err != nil {
-			fmt.Println("Erro ao fazer a requisição:", err)
-			return
-		}
-		defer resp.Body.Close()
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println("Erro ao ler resposta:", err)
-			return
-		}
-
-		fmt.Println(string(body))
-
 		os.Exit(0)
 	}
 

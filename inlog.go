@@ -46,7 +46,6 @@ func getConfig() map[string]string {
 	configPathFile := filepath.Dir(os.Args[0]) + "/" + configPath
 
 	if _, err := os.Stat(configPathFile); os.IsNotExist(err) {
-		// configpath does not exist
 		return config
 	}
 
@@ -100,10 +99,14 @@ func getCurrentDirectory() string {
 func runInlog() {
 	config := getConfig()
 
-	// verifique se existe user_uuid em config
 	if _, ok := config["user_uuid"]; !ok {
 		fmt.Println("You haven't configured your instance yet, please run the ./inlog configure user_uuid <user_id> command")
 		os.Exit(1)
+	}
+
+	urlApi := "https://receiver.inlog.inapplet.com"
+	if _, ok := config["url_api"]; ok {
+		urlApi = config["url_api"]
 	}
 
 	loopTime := 60
@@ -151,7 +154,7 @@ func runInlog() {
 
 	jsonPayload, _ := json.Marshal(payload)
 
-	url := "https://receiver.inlog.inapplet.com/v1/engine/machine/"
+	url := urlApi + "/v1/engine/machine/"
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
@@ -194,7 +197,7 @@ func runInlog() {
 
 	for {
 		logUnit()
-		time.Sleep(time.Second * time.Duration(loopTime)) // adjust the time interval as needed
+		time.Sleep(time.Second * time.Duration(loopTime))
 	}
 }
 
@@ -202,16 +205,18 @@ func logUnit() {
 
 	config := getConfig()
 
-	url := "https://receiver.inlog.inapplet.com/v1/engine/log_monitor/"
+	urlApi := "https://receiver.inlog.inapplet.com"
+	if _, ok := config["url_api"]; ok {
+		urlApi = config["url_api"]
+	}
 
-	// Obtenção de informações de CPU
+	url := urlApi + "/v1/engine/log_monitor/"
+
 	cpuPercent, _ := cpuPercent()
 	loadAvg, _ := load.Avg()
 
-	// Informações de memória
 	virtualMemory, _ := mem.VirtualMemory()
 
-	// Informações de rede
 	netCounters, _ := net.IOCounters(false)
 
 	diskName := "sda"

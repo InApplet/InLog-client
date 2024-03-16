@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 CGO_ENABLED=0 go build
 

@@ -163,7 +163,9 @@ func runInlog() {
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Error sending HTTP request:", err)
@@ -186,8 +188,9 @@ func runInlog() {
 		}
 
 		if data, ok := responseJSON["data"].(map[string]interface{}); ok {
-			if machineUUID, ok := data["_id"].(string); ok {
+			if machineUUID, ok := data["machine_uuid"].(string); ok {
 				config["machine_uuid"] = machineUUID
+				println("> Save new machine_uuid")
 				saveConfig(config)
 			}
 		}
@@ -290,7 +293,9 @@ func logUnit() {
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Erro ao enviar requisição HTTP: %s", err)

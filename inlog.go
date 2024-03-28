@@ -104,7 +104,7 @@ func runInlog() {
 		os.Exit(1)
 	}
 
-	urlApi := "https://receiver.monitor.inlog.inapplet.com/"
+	urlApi := "https://receiver.monitor.inlog.inapplet.com"
 	if _, ok := config["url_api"]; ok {
 		urlApi = config["url_api"]
 	}
@@ -208,7 +208,7 @@ func logUnit() {
 
 	config := getConfig()
 
-	urlApi := "https://receiver.monitor.inlog.inapplet.com/"
+	urlApi := "https://receiver.monitor.inlog.inapplet.com"
 	if _, ok := config["url_api"]; ok {
 		urlApi = config["url_api"]
 	}
